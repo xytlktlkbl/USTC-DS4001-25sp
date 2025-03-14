@@ -1,0 +1,258 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsthm,amsmath,amssymb}
+\usepackage[UTF8]{ctex}
+\usepackage[tc]{titlepic}
+\usepackage{titlesec}
+\usepackage{cite}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{subfigure}
+\usepackage{float}
+\usepackage[textwidth=14.5cm]{geometry}
+\usepackage[section]{placeins}
+\usepackage{makeidx}
+\usepackage{mathrsfs}
+\usepackage{color}
+\usepackage{ulem}
+\usepackage{enumitem}
+\geometry{a4paper,scale=0.8,left=2cm,right=2cm}
+\pagestyle{fancy}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{tcolorbox}
+\usepackage{listings}
+
+\lstset{
+    language=Python, % 指定编程语言，如 Python、Java、C++ 等
+    basicstyle=\footnotesize\ttfamily, % 调小字体大小
+    keywordstyle=\color{blue}, % 关键字颜色
+    commentstyle=\color{green!50!black}, % 注释颜色
+    stringstyle=\color{red}, % 字符串颜色
+    numbers=left, % 行号显示位置，left 表示在左侧显示
+    numberstyle=\tiny\color{gray}, % 行号字体样式
+    stepnumber=1, % 行号递增步长
+    numbersep=5pt, % 行号与代码之间的间距
+    backgroundcolor=\color{gray!10}, % 代码块背景颜色
+    showspaces=false, % 不显示空格
+    showstringspaces=false, % 不显示字符串中的空格
+    showtabs=false, % 不显示制表符
+    tabsize=2 % 制表符宽度
+}
+
+
+% 定义一个自定义命令，参数 #1 为中间的文字
+\newcommand{\sectiondivider}[1]{%
+  \vspace{1em} % 上下间距，可根据需要调整
+  \begin{center}
+    \noindent
+    \makebox[0.3\linewidth]{\hrulefill}%
+    \hspace{0.5em}% 左右间距
+    {\Large\textbf{#1}}%
+    \hspace{0.5em}%
+    \makebox[0.3\linewidth]{\hrulefill}%
+  \end{center}
+  \vspace{3em}
+}
+
+
+\lhead{第 1 次作业\\\today}
+\chead{中国科学技术大学\\	DS4001 人工智能原理与技术}
+
+\rhead{Homework 1\\ {\CTEXoptions[today=old]\today}}
+\newcommand{\upcite}[1]{\textsuperscript{\cite{#1}}}
+
+\titleformat*{\section}{\bfseries\Large}
+\titleformat*{\subsection}{\bfseries\large}
+
+\title{\bfseries DS4001-25SP-HW1：搜索}
+\author{姓名\quad PB22222222}
+
+\begin{document}
+%\begin{sloopypar}
+\maketitle
+% \clearpage
+
+\setcounter{section}{-1}
+\section{代码理解[20\%]}
+
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{[截图]} %0a
+    你的截图
+\end{enumerate}
+
+
+\subsection{整体结构分析[6\%]}
+
+\begin{enumerate}[label=(\alph*), start=2]
+    \item \textbf{[配对]} %0b
+    \begin{itemize}
+        \item \texttt{(1):}你的答案
+        \item \texttt{(2):}你的答案
+        \item \texttt{(3):}你的答案
+        \item \texttt{(4):}你的答案
+        \item \texttt{(5):}你的答案
+        \item \texttt{(6):}你的答案
+        \item \texttt{(7):}你的答案
+    \end{itemize}
+\end{enumerate}
+
+\subsection{详细代码阅读[10\%=2\%*5]}
+
+\begin{enumerate}[label=(\alph*), start=3]
+    \item \textbf{[多选]} 你的答案 %0c
+    \vspace{10pt}
+
+    \item \textbf{[单选]} 你的答案 %0d
+    \vspace{10pt}
+
+    \item \textbf{[多选]} 你的答案 %0e
+    \vspace{10pt}
+\end{enumerate}
+
+\begin{enumerate}[label=(\alph*), start=6]
+    \item \textbf{[多选]} 你的答案 %0f
+    \vspace{10pt}
+
+    \item  \textbf{[简答]} %0g
+    你的答案 
+\end{enumerate}
+
+\section{问题 1：查找最短路径[29\%]}
+
+\subsection{建模[10\%=6\%+4\%]}
+
+\begin{enumerate}[label=(\alph*), start=1]
+    \item \textbf{[代码]} %1a
+    \begin{lstlisting}[language=Python]
+    class ShortestPathProblem(SearchProblem):
+    """
+    Defines a search problem that corresponds to finding the shortest path 
+    from `startLocation` to any location with the specified `endTag`.
+    """
+
+    def __init__(self, startLocation: str, endTag: str, cityMap: CityMap):
+        self.startLocation = startLocation
+        self.endTag = endTag
+        self.cityMap = cityMap
+
+    def startState(self) -> State:
+        # BEGIN_YOUR_CODE 
+        raise NotImplementedError("Override me")
+        # END_YOUR_CODE
+
+    def isEnd(self, state: State) -> bool:
+        # BEGIN_YOUR_CODE 
+        raise NotImplementedError("Override me")
+        # END_YOUR_CODE
+
+    def successorsAndCosts(self, state: State) -> List[Tuple[str, State, float]]:
+        # BEGIN_YOUR_CODE 
+        raise NotImplementedError("Override me")
+        # END_YOUR_CODE
+    \end{lstlisting}
+
+    \item \textbf{[代码]} %1b
+    \begin{lstlisting}[language=Python]
+    # Your Code
+    \end{lstlisting}
+\end{enumerate}
+
+\subsection{算法[19\%=6\%+5\%+2\%+6\%]}
+
+\begin{enumerate}[label=(\alph*), start=3]
+    \item \textbf{[简答]} %1c
+    你的答案
+    \item \textbf{[简答]} %1d
+    你的答案
+\end{enumerate}
+
+\begin{enumerate}[label=(\alph*), start=5]
+    \item \textbf{[判断]} %1e
+    你的答案
+    \item \textbf{[简答]} %1f
+    你的答案
+\end{enumerate}
+
+\section{问题 2：查找带无序途径点的最短路径[17\%]}
+
+\subsection{建模[10\%=6\%+4\%]}
+
+\begin{enumerate}[label=(\alph*), start=1]
+
+    \item \textbf{[代码]} %2a
+    \begin{lstlisting}[language=Python]
+    # Your Code
+    \end{lstlisting}
+    \item \textbf{[代码]} %2b
+    \begin{lstlisting}[language=Python]
+    # Your Code
+    \end{lstlisting}
+\end{enumerate}
+
+\subsection{算法[7\%=2\%+5\%]}
+
+\begin{enumerate}[label=(\alph*), start=3]
+
+    \item \textbf{[判断]} %2c
+    你的答案
+    \item \textbf{[简答]} %2d
+    你的答案
+    
+\end{enumerate}
+
+\section{问题 3：使用 A* 加快搜索速度[32\%]}
+
+\subsection{将UCS转化为A*[4\%]}
+
+\begin{enumerate}[label=(\alph*), start=1]
+    \item \textbf{[代码]} %3a
+    \begin{lstlisting}[language=Python]
+    # Your Code
+    \end{lstlisting}
+\end{enumerate}
+
+\subsection{实现启发式函数[18\%=3\%+6\%+3\%+6\%]}
+
+\begin{enumerate}[label=(\alph*), start=2]
+    \item \textbf{[简答]} %3b
+    你的答案
+    \item \textbf{[代码]} %3c
+    \begin{lstlisting}[language=Python]
+    # Your Code
+    \end{lstlisting}
+\end{enumerate}
+
+对于问题2，我们使用不带途径点的最短路径长度作为启发式函数。
+
+\begin{enumerate}[label=(\alph*), start=4]
+    \item \textbf{[简答]} %3d
+    你的答案
+    \item \textbf{[代码]} %3e
+    \begin{lstlisting}[language=Python]
+    # Your Code
+    \end{lstlisting}
+\end{enumerate}
+
+\subsection{利用合肥市地图对比运行时间[10\%=4\%+6\%]}
+
+\begin{enumerate}[label=(\alph*), start=6]
+    \item \textbf{[代码]} %3f
+    \begin{lstlisting}[language=Python]
+    # Your Code
+    \end{lstlisting}
+    \item \textbf{[简答]} %3g
+    你的答案
+\end{enumerate}
+
+\section*{体验反馈[2\%]}
+
+\begin{enumerate}[label=(\alph*), start=1]
+    \item \textbf{[必做]} %所花时间
+    你的答案
+    \item \textbf{[选做]} %其他反馈
+    你的答案
+\end{enumerate}
+
+
+\end{document}
