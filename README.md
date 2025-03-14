@@ -23,7 +23,7 @@
 | homework/lab | topic | deadline |
 | :----------: | :---: | :------: |
 |     HW0      | intro |    \     |
-|              |       |          |
+|     HW1      |Search |   4.10   |
 
 
 
