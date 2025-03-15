@@ -5,6 +5,8 @@
 Install the following dependencies (in a virtual environment, such as Anaconda) for working with 
  [OpenStreetMap](https://www.openstreetmap.org/) (OSM) data, and visualizing maps nicely in the browser.
 
+Recommended: Use Python 3.9 to avoid dependency conflicts.
+
 ```bash
 pip install -r requirements.txt
 ```
