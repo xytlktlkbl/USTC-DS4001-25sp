@@ -754,7 +754,7 @@ grader.add_basic_part(
             makeTag("landmark", "3rd_teaching_building"),
         ],
         heuristic=USTCNoWaypointsHeuristic,
-        expectedCost=2754.8179666727783,
+        expectedCost=2730.5277470807923,
     ),
     max_points=0.5,
     max_seconds=0.5,
