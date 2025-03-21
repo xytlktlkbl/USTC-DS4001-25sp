@@ -32,7 +32,7 @@
 | class  |     topic      |
 | :----: | :------------: |
 | Class1 | classification |
-|        |                |
+| Class2 |      FNN       |
 
 
 
