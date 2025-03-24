@@ -792,16 +792,15 @@ if grader.selectedPartName in [
     None,
 ]:
     HefeiMap = createHefeiMap()
-    problem1 = submission.getHefeiShortestPathProblem()
-    problem2 = submission.getHefeiShortestPathProblem_withHeuristic()
 
 def t_3f_without_Heuristic():
+    problem = submission.getHefeiShortestPathProblem(HefeiMap)
     ucs = util.UniformCostSearch(verbose=0)
-    ucs.solve(problem1)
-    path = extractPath(problem1.startLocation, ucs)
+    ucs.solve(problem)
+    path = extractPath(problem.startLocation, ucs)
     printPath(path=path, waypointTags=[], cityMap=HefeiMap)
     grader.require_is_true(
-        checkValid(path, HefeiMap, problem1.startLocation, problem1.endTag, [])
+        checkValid(path, HefeiMap, problem.startLocation, problem.endTag, [])
     )
 
 grader.add_basic_part(
@@ -813,12 +812,13 @@ grader.add_basic_part(
 )
 
 def t_3f_with_Heuristic():
+    problem = submission.getHefeiShortestPathProblem_withHeuristic(HefeiMap)
     ucs = util.UniformCostSearch(verbose=0)
-    ucs.solve(problem2)
-    path = extractPath(problem2.startLocation, ucs)
+    ucs.solve(problem)
+    path = extractPath(problem.startLocation, ucs)
     printPath(path=path, waypointTags=[], cityMap=HefeiMap)
     grader.require_is_true(
-        checkValid(path, HefeiMap, problem2.startLocation, problem2.endTag, [])
+        checkValid(path, HefeiMap, problem.startLocation, problem.endTag, [])
     )
 
 grader.add_basic_part(
