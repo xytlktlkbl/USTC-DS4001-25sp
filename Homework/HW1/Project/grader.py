@@ -786,16 +786,22 @@ grader.add_manual_part("3d", max_points=2, description="example of n waypointTag
 # Problem 3f: -- Hefei Map
 
 # Instantiate the Hefei Map as a constant --> just load once!
-HefeiMap = createHefeiMap()
+if grader.selectedPartName in [
+    "3f-without_Heuristic",
+    "3f-with_Heuristic",
+    None,
+]:
+    HefeiMap = createHefeiMap()
+    problem1 = submission.getHefeiShortestPathProblem()
+    problem2 = submission.getHefeiShortestPathProblem_withHeuristic()
 
 def t_3f_without_Heuristic():
-    problem = submission.getHefeiShortestPathProblem()
     ucs = util.UniformCostSearch(verbose=0)
-    ucs.solve(problem)
-    path = extractPath(problem.startLocation, ucs)
+    ucs.solve(problem1)
+    path = extractPath(problem1.startLocation, ucs)
     printPath(path=path, waypointTags=[], cityMap=HefeiMap)
     grader.require_is_true(
-        checkValid(path, HefeiMap, problem.startLocation, problem.endTag, [])
+        checkValid(path, HefeiMap, problem1.startLocation, problem1.endTag, [])
     )
 
 grader.add_basic_part(
@@ -807,13 +813,12 @@ grader.add_basic_part(
 )
 
 def t_3f_with_Heuristic():
-    problem = submission.getHefeiShortestPathProblem_withHeuristic()
     ucs = util.UniformCostSearch(verbose=0)
-    ucs.solve(problem)
-    path = extractPath(problem.startLocation, ucs)
+    ucs.solve(problem2)
+    path = extractPath(problem2.startLocation, ucs)
     printPath(path=path, waypointTags=[], cityMap=HefeiMap)
     grader.require_is_true(
-        checkValid(path, HefeiMap, problem.startLocation, problem.endTag, [])
+        checkValid(path, HefeiMap, problem2.startLocation, problem2.endTag, [])
     )
 
 grader.add_basic_part(
