@@ -222,22 +222,20 @@ class NoWaypointsHeuristic(Heuristic):
 ########################################################################################
 # Problem 3f: Plan a Route through Hefei with or without a Heuristic
 
-def getHefeiShortestPathProblem() -> ShortestPathProblem:
+def getHefeiShortestPathProblem(cityMap: CityMap) -> ShortestPathProblem:
     """
     Create a search problem using the map of Hefei
     """
-    cityMap = createHefeiMap()
     startLocation=locationFromTag(makeTag("landmark", "USTC"), cityMap)
     endTag=makeTag("landmark", "Chaohu")
     # BEGIN_YOUR_CODE (our solution is 1 lines of code, but don't worry if you deviate from this)
     raise NotImplementedError("Override me")
     # END_YOUR_CODE
 
-def getHefeiShortestPathProblem_withHeuristic() -> ShortestPathProblem:
+def getHefeiShortestPathProblem_withHeuristic(cityMap: CityMap) -> ShortestPathProblem:
     """
     Create a search problem with Heuristic using the map of Hefei
     """
-    cityMap = createHefeiMap()
     startLocation=locationFromTag(makeTag("landmark", "USTC"), cityMap)
     endTag=makeTag("landmark", "Chaohu")
     # BEGIN_YOUR_CODE (our solution is 2 lines of code, but don't worry if you deviate from this)

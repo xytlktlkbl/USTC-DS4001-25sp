@@ -754,7 +754,7 @@ grader.add_basic_part(
             makeTag("landmark", "3rd_teaching_building"),
         ],
         heuristic=USTCNoWaypointsHeuristic,
-        expectedCost=2754.8179666727783,
+        expectedCost=2730.5277470807923,
     ),
     max_points=0.5,
     max_seconds=0.5,
@@ -786,10 +786,15 @@ grader.add_manual_part("3d", max_points=2, description="example of n waypointTag
 # Problem 3f: -- Hefei Map
 
 # Instantiate the Hefei Map as a constant --> just load once!
-HefeiMap = createHefeiMap()
+if grader.selectedPartName in [
+    "3f-without_Heuristic",
+    "3f-with_Heuristic",
+    None,
+]:
+    HefeiMap = createHefeiMap()
 
 def t_3f_without_Heuristic():
-    problem = submission.getHefeiShortestPathProblem()
+    problem = submission.getHefeiShortestPathProblem(HefeiMap)
     ucs = util.UniformCostSearch(verbose=0)
     ucs.solve(problem)
     path = extractPath(problem.startLocation, ucs)
@@ -807,7 +812,7 @@ grader.add_basic_part(
 )
 
 def t_3f_with_Heuristic():
-    problem = submission.getHefeiShortestPathProblem_withHeuristic()
+    problem = submission.getHefeiShortestPathProblem_withHeuristic(HefeiMap)
     ucs = util.UniformCostSearch(verbose=0)
     ucs.solve(problem)
     path = extractPath(problem.startLocation, ucs)
