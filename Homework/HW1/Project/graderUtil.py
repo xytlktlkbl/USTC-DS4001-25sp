@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Library to do grading of Python programs.
 Usage (see grader.py):
@@ -12,7 +13,7 @@ Usage (see grader.py):
     grader.addHiddenPart(number, grade_func, max_points, max_seconds, description="a hidden test")
 
     # add a manual grading part
-    grader.addManualPart(number, grade_func, max_points, description="written problem")
+    grader.addManualPart(number, max_points, description="written problem")
 
     # run grading
     grader.grade()
@@ -27,30 +28,26 @@ import signal
 import sys
 import traceback
 
-default_max_seconds = 5  # 5 second
-TOLERANCE = 1e-4  # For measuring whether two floats are equal
+default_max_seconds = 5  # 默认 5 秒
+TOLERANCE = 1e-4  # 浮点数比较容差
 
 BASIC_MODE = 'basic'  # basic
-AUTO_MODE = 'auto'  # basic + hidden
-ALL_MODE = 'all'  # basic + hidden + manual
+AUTO_MODE = 'auto'    # basic + hidden
+ALL_MODE = 'all'      # basic + hidden + manual
 
-
-# When reporting stack traces as feedback, ignore parts specific to the grading
-# system.
+# 当反馈中显示堆栈信息时，忽略评分系统自身的部分
 def is_traceback_item_grader(item):
     return item[0].endswith('graderUtil.py')
-
 
 def is_collection(x):
     return isinstance(x, list) or isinstance(x, tuple)
 
-
-# Return whether two answers are equal.
+# 判断两个答案是否相等
 def is_equal(true_answer, pred_answer, tolerance=TOLERANCE):
-    # Handle floats specially
+    # 浮点数特殊处理
     if isinstance(true_answer, float) or isinstance(pred_answer, float):
         return abs(true_answer - pred_answer) < tolerance
-    # Recurse on collections to deal with floats inside them
+    # 对集合类型进行递归比较，处理内部的浮点数
     if is_collection(true_answer) and is_collection(pred_answer) and len(true_answer) == len(pred_answer):
         for a, b in zip(true_answer, pred_answer):
             if not is_equal(a, b):
@@ -64,7 +61,7 @@ def is_equal(true_answer, pred_answer, tolerance=TOLERANCE):
                 return False
         return True
 
-    # Numpy array comparison
+    # Numpy 数组比较
     if type(true_answer).__name__ == 'ndarray':
         import numpy as np
         if isinstance(true_answer, np.ndarray) and isinstance(pred_answer, np.ndarray):
@@ -75,14 +72,12 @@ def is_equal(true_answer, pred_answer, tolerance=TOLERANCE):
                     return False
             return True
 
-    # Do normal comparison
+    # 普通比较
     return true_answer == pred_answer
 
-
-# Run a function, timing out after max_seconds.
+# 执行函数并在超过最大时间后终止
 class TimeoutFunctionException(Exception):
     pass
-
 
 class TimeoutFunction:
     def __init__(self, function, max_seconds):
@@ -96,21 +91,19 @@ class TimeoutFunction:
 
     def __call__(self, *args):
         if os.name == 'nt':
-            # Windows does not have signal.SIGALRM
-            # Will not stop after max_seconds second but can still throw an exception
+            # Windows 不支持 signal.SIGALRM 和 setitimer
             time_start = datetime.datetime.now()
             result = self.function(*args)
             time_end = datetime.datetime.now()
             if time_end - time_start > datetime.timedelta(seconds=self.max_seconds + 1):
                 raise TimeoutFunctionException()
             return result
-            # End modification for Windows here
+        # Linux 下使用 setitimer 支持浮点数秒数
         signal.signal(signal.SIGALRM, self.handle_max_seconds)
-        signal.alarm(self.max_seconds + 1)
+        signal.setitimer(signal.ITIMER_REAL, self.max_seconds + 1)
         result = self.function(*args)
-        signal.alarm(0)
+        signal.setitimer(signal.ITIMER_REAL, 0)
         return result
-
 
 class Part:
     def __init__(self, number, grade_func, max_points, max_seconds, extra_credit, description, basic):
@@ -124,17 +117,17 @@ class Part:
             raise Exception("Invalid max_seconds: %s" % max_seconds)
         if not description:
             print('ERROR: description required for part {}'.format(number))
-        # Specification of part
-        self.number = number  # Unique identifier for this part.
-        self.description = description  # Description of this part
-        self.grade_func = grade_func  # Function to call to do grading
-        self.max_points = max_points  # Maximum number of points attainable on this part
-        self.max_seconds = max_seconds  # Maximum allowed time that the student's code can take (in seconds)
-        self.extra_credit = extra_credit  # Whether this is an extra credit problem
+        # 题目规格
+        self.number = number                # 本题的唯一标识符
+        self.description = description        # 题目描述
+        self.grade_func = grade_func          # 用于评分的函数
+        self.max_points = max_points          # 本题可获得的最高分
+        self.max_seconds = max_seconds        # 运行允许的最长时间（秒）
+        self.extra_credit = extra_credit      # 是否为加分题
         self.basic = basic
-        # Grading the part
+        # 评分结果
         self.points = 0
-        self.side = None  # Side information
+        self.side = None   # 附加信息
         self.seconds = 0
         self.messages = []
         self.failed = False
@@ -154,19 +147,17 @@ class Part:
     def is_manual(self):
         return self.grade_func is None
 
-
 class Grader:
     def __init__(self, args=None):
         if args is None:
             args = sys.argv
-        self.parts = []  # Parts (to be added)
-        self.useSolution = False  # Set to true if we are actually evaluating the hidden test cases
+        self.parts = []      # 待添加的各部分
+        self.useSolution = False  # 若为 True，则对隐藏测试用例也进行评分
 
         parser = argparse.ArgumentParser()
         parser.add_argument('--js', action='store_true', help='Write JS file with information about this assignment')
-        parser.add_argument('--json', action='store_true',
-                            help='Write JSON file with information about this assignment')
-        parser.add_argument('--summary', action='store_true', help='Don\'t actually run code')
+        parser.add_argument('--json', action='store_true', help='Write JSON file with information about this assignment')
+        parser.add_argument('--summary', action='store_true', help="Don't actually run code")
         parser.add_argument('remainder', nargs=argparse.REMAINDER)
         self.params = parser.parse_args(args[1:])
 
@@ -182,27 +173,26 @@ class Grader:
                 self.mode = AUTO_MODE
                 self.selectedPartName = args[0]
 
-        self.messages = []  # General messages
-        self.currentPart = None  # Which part we're grading
-        self.fatalError = False  # Set this if we should just stop immediately
+        self.messages = []   # 通用消息
+        self.currentPart = None  # 当前正在评分的部分
+        self.fatalError = False  # 若出现严重错误则终止
 
     def add_basic_part(self, number, grade_func, max_points=1, max_seconds=default_max_seconds, extra_credit=False,
                        description=""):
-        """Add a basic test case. The test will be visible to students."""
+        """添加基本测试用例（学生可见）"""
         self.assert_new_number(number)
         part = Part(number, grade_func, max_points, max_seconds, extra_credit, description, basic=True)
         self.parts.append(part)
 
     def add_hidden_part(self, number, grade_func, max_points=1, max_seconds=default_max_seconds, extra_credit=False,
                         description=""):
-        """Add a hidden test case. The output should NOT be visible to students
-        and so should be inside a BEGIN_HIDE block."""
+        """添加隐藏测试用例（学生不可见）"""
         self.assert_new_number(number)
         part = Part(number, grade_func, max_points, max_seconds, extra_credit, description, basic=False)
         self.parts.append(part)
 
     def add_manual_part(self, number, max_points, extra_credit=False, description=""):
-        """Add a manual part."""
+        """添加人工评分部分"""
         self.assert_new_number(number)
         part = Part(number, None, max_points, None, extra_credit, description, basic=False)
         self.parts.append(part)
@@ -211,7 +201,7 @@ class Grader:
         if number in [part.number for part in self.parts]:
             raise Exception("Part number %s already exists" % number)
 
-    # Try to load the module (submission from student).
+    # 尝试导入学生提交的模块
     def load(self, module_name):
         try:
             return __import__(module_name)
@@ -231,33 +221,33 @@ class Grader:
 
         start_time = datetime.datetime.now()
         try:
-            TimeoutFunction(part.grade_func, part.max_seconds)()  # Call the part's function
+            TimeoutFunction(part.grade_func, part.max_seconds)()  # 调用测试函数
         except KeyboardInterrupt:
             raise
         except MemoryError:
-            # signal.alarm(0)
+            if os.name != 'nt':
+                signal.setitimer(signal.ITIMER_REAL, 0)
             gc.collect()
             self.fail('Memory limit exceeded.')
         except TimeoutFunctionException:
-            # signal.alarm(0)
+            if os.name != 'nt':
+                signal.setitimer(signal.ITIMER_REAL, 0)
             self.fail('Time limit (%s seconds) exceeded.' % part.max_seconds)
         except Exception as e:
-            #signal.alarm(0)
+            if os.name != 'nt':
+                signal.setitimer(signal.ITIMER_REAL, 0)
             self.fail('Exception thrown: %s -- %s' % (str(type(e)), str(e)))
             self.print_exception()
         except SystemExit:
-            # Catch SystemExit raised by exit(), quit() or sys.exit()
-            # This class is not a subclass of Exception and we don't
-            # expect students to raise it.
             self.fail('Unexpected exit.')
             self.print_exception()
         end_time = datetime.datetime.now()
-        part.seconds = (end_time - start_time).seconds
-        ###### quick fix to pacman problem 4 ######
+        # 使用 total_seconds() 得到包含小数部分的秒数
+        part.seconds = (end_time - start_time).total_seconds()
         if part.seconds > part.max_seconds:
-            # signal.alarm(0)
+            if os.name != 'nt':
+                signal.setitimer(signal.ITIMER_REAL, 0)
             self.fail('Time limit (%s seconds) exceeded.' % part.max_seconds)
-        ###### quick fix to pacman problem 4 ######
         if part.is_hidden() and not self.useSolution:
             display_points = '???/%s points (hidden test ungraded)' % part.max_points
         else:
@@ -288,13 +278,13 @@ class Grader:
 
         result = {'mode': self.mode}
 
-        # Grade it!
+        # 开始评分
         if not self.params.summary and not self.fatalError:
             print('========== START GRADING')
             for part in parts:
                 self.grade_part(part)
 
-            # When students have it (not useSolution), only include basic tests.
+            # 如果不是 useSolution 模式，仅计入基本测试部分
             active_parts = [part for part in parts if self.useSolution or part.basic]
 
             total_points = sum(part.points for part in active_parts if not part.extra_credit)
@@ -316,7 +306,7 @@ class Grader:
             r = {'number': part.number, 'name': part.description}
 
             if self.params.summary:
-                # Just print out specification of the part
+                # 仅显示部分规格
                 r['description'] = part.description
                 r['max_seconds'] = part.max_seconds
                 r['max_points'] = part.max_points
@@ -324,7 +314,7 @@ class Grader:
                 r['basic'] = part.basic
             else:
                 r['score'] = part.points
-                # Force max_score to be 0 for extra credits for displaying correct total points on Gradescope
+                # 若为加分题且处于 AUTO_MODE，则 max_score 强制为 0，方便 Gradescope 正确显示总分
                 r['max_score'] = 0 if (part.extra_credit and self.mode == AUTO_MODE) else part.max_points
                 r["visibility"] = "after_published" if part.is_hidden() else "visible"
                 r['seconds'] = part.seconds
@@ -368,8 +358,7 @@ class Grader:
                 print('var ' + mode + 'Result = ' + json.dumps(result) + ';', file=out)
             print('Wrote to %s' % path)
 
-    # Called by the grader to modify state of the current part
-
+    # 以下方法用于修改当前部分的状态
     def add_points(self, amt):
         self.currentPart.points += amt
 
