@@ -1,4 +1,5 @@
 import os
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 import torch
 import torchvision
 import torch.utils.data.dataloader as Data
@@ -52,15 +53,15 @@ class Net(torch.nn.Module):
     def __init__(self):
         super(Net, self).__init__()
         self.dense = torch.nn.Sequential(
-            torch.nn.Linear(784, 512),
-            torch.nn.BatchNorm1d(512),  # resist overfitting
-            torch.nn.ReLU(),            # what if we use other activation func such as Sigmoid() ?
-            torch.nn.Linear(512, 10),
+            torch.nn.Linear(784, 512),  # 将输入的28*28维数据映射到512维的隐藏空间
+            torch.nn.BatchNorm1d(512),  # resist overfitting 批归一化
+            torch.nn.ReLU(),            # what if we use other activation func such as Sigmoid() ? 引入非线性
+            torch.nn.Linear(512, 10),   #将隐藏层的512维映射到输出层的10维
         )
 
-    def forward(self, x): # forward propagation
-        x = x.view(-1, 784)
-        x = self.dense(x)
+    def forward(self, x): # forward propagation前向传播
+        x = x.view(-1, 784) #将输入数据(如图像)展平为1D784维向量
+        x = self.dense(x)   #通过隐藏层和输出层
         return x
 
 class Tester:
