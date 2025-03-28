@@ -39,17 +39,20 @@ class ShortestPathProblem(SearchProblem):
 
     def startState(self) -> State:
         # BEGIN_YOUR_CODE (our solution is 1 line of code, but don't worry if you deviate from this)
-        raise NotImplementedError("Override me")
+        return State(location=self.startLocation)
         # END_YOUR_CODE
 
     def isEnd(self, state: State) -> bool:
         # BEGIN_YOUR_CODE (our solution is 1 line of code, but don't worry if you deviate from this)
-        raise NotImplementedError("Override me")
+        return self.endTag in self.cityMap.tags[state.location]
         # END_YOUR_CODE
 
     def successorsAndCosts(self, state: State) -> List[Tuple[str, State, float]]:
         # BEGIN_YOUR_CODE (our solution is 4 lines of code, but don't worry if you deviate from this)
-        raise NotImplementedError("Override me")
+        succ = []
+        for n_location, distance in self.cityMap.distances[state.location].items():
+            succ.append((n_location, State(n_location), distance))
+        return succ
         # END_YOUR_CODE
 
 
@@ -71,7 +74,8 @@ def getUSTCShortestPathProblem() -> ShortestPathProblem:
     cityMap = createUSTCMap()
 
     # BEGIN_YOUR_CODE (our solution is 2 lines of code, but don't worry if you deviate from this)
-    raise NotImplementedError("Override me")
+    startLocation = '2655277430'
+    endTag = 'label=10583324208'
     # END_YOUR_CODE
     return ShortestPathProblem(startLocation, endTag, cityMap)
 

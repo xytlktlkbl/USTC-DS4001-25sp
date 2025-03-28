@@ -52,6 +52,7 @@ class CityMap:
     def __init__(self) -> None:
         # Location label -> actual geolocation (latitude/longitude)
         self.geoLocations: Dict[str, GeoLocation] = {}
+        #: Dict[str, GeoLocation]类型注解，说明是一个以str为键，GeoLoa为值的dict
 
         # Location label -> list of tags (e.g., amenity=park)
         self.tags: Dict[str, List[str]] = defaultdict(list)
