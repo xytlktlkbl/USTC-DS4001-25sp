@@ -104,20 +104,21 @@ class WaypointsShortestPathProblem(SearchProblem):
 
     def startState(self) -> State:
         # BEGIN_YOUR_CODE (our solution is 1 line of code, but don't worry if you deviate from this)
-        return State(location=self.startLocation, memory=tuple())
+        return State(location=self.startLocation, memory=tuple(set(self.cityMap.tags[self.startLocation]) & set(self.waypointTags)))
         # END_YOUR_CODE
 
     def isEnd(self, state: State) -> bool:
         # BEGIN_YOUR_CODE (our solution is 1 lines of code, but don't worry if you deviate from this)
-        return self.endTag in self.cityMap.tags[state.location] and set(self.waypointTags).issubset(set(State.memory))
+        return self.endTag in self.cityMap.tags[state.location] and set(self.waypointTags).issubset(set(state.memory))
         # END_YOUR_CODE
 
     def successorsAndCosts(self, state: State) -> List[Tuple[str, State, float]]:
         # BEGIN_YOUR_CODE (our solution is 13 lines of code, but don't worry if you deviate from this)
         succ = []
+        set_tags = set(self.waypointTags)
         for n_location, distance in self.cityMap.distances[state.location].items():
-            succ.append((n_location, State(location=n_location, memory=state.memory | (state.memory & set(self.waypointTags))),
-                          distance))
+            list_tags = [c for c in self.cityMap.tags[n_location] if c in set_tags]
+            succ.append((n_location, State(location=n_location, memory=state.memory + tuple(list_tags)), distance))
         return succ
 
         # END_YOUR_CODE
@@ -137,7 +138,9 @@ def getUSTCWaypointsShortestPathProblem() -> WaypointsShortestPathProblem:
     """
     cityMap = createUSTCMap()
     # BEGIN_YOUR_CODE (our solution is 3 lines of code, but don't worry if you deviate from this)
-    raise NotImplementedError("Override me")
+    startLocation = '2655277430'
+    endTag = 'label=10583324208'
+    waypointTags = ['label=2655277439', 'name=中科大西区东门']
     # END_YOUR_CODE
     return WaypointsShortestPathProblem(startLocation, waypointTags, endTag, cityMap)
 
