@@ -104,17 +104,22 @@ class WaypointsShortestPathProblem(SearchProblem):
 
     def startState(self) -> State:
         # BEGIN_YOUR_CODE (our solution is 1 line of code, but don't worry if you deviate from this)
-        raise NotImplementedError("Override me")
+        return State(location=self.startLocation, memory=tuple())
         # END_YOUR_CODE
 
     def isEnd(self, state: State) -> bool:
         # BEGIN_YOUR_CODE (our solution is 1 lines of code, but don't worry if you deviate from this)
-        raise NotImplementedError("Override me")
+        return self.endTag in self.cityMap.tags[state.location] and set(self.waypointTags).issubset(set(State.memory))
         # END_YOUR_CODE
 
     def successorsAndCosts(self, state: State) -> List[Tuple[str, State, float]]:
         # BEGIN_YOUR_CODE (our solution is 13 lines of code, but don't worry if you deviate from this)
-        raise NotImplementedError("Override me")
+        succ = []
+        for n_location, distance in self.cityMap.distances[state.location].items():
+            succ.append((n_location, State(location=n_location, memory=state.memory | (state.memory & set(self.waypointTags))),
+                          distance))
+        return succ
+
         # END_YOUR_CODE
 
 
