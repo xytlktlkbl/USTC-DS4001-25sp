@@ -99,26 +99,26 @@ class WaypointsShortestPathProblem(SearchProblem):
         self.endTag = endTag
         self.cityMap = cityMap
 
-        # We want waypointTags to be consistent/canonical (sorted) and hashable (tuple)
-        self.waypointTags = tuple(sorted(waypointTags))
+        # We want waypointTags to be consistent/canonical (sorted) and hashable (frozenset)
+        self.waypointTags = tuple(waypointTags)
+        self.waypointTags_set = frozenset(self.waypointTags)
 
     def startState(self) -> State:
         # BEGIN_YOUR_CODE (our solution is 1 line of code, but don't worry if you deviate from this)
-        return State(location=self.startLocation, memory=tuple(set(self.cityMap.tags[self.startLocation]) & set(self.waypointTags)))
+        return State(location=self.startLocation, memory=tuple((frozenset(self.cityMap.tags[self.startLocation]) & self.waypointTags_set)))
         # END_YOUR_CODE
 
     def isEnd(self, state: State) -> bool:
         # BEGIN_YOUR_CODE (our solution is 1 lines of code, but don't worry if you deviate from this)
-        return self.endTag in self.cityMap.tags[state.location] and set(self.waypointTags).issubset(set(state.memory))
+        return self.endTag in self.cityMap.tags[state.location] and self.waypointTags_set.issubset(frozenset(state.memory))
         # END_YOUR_CODE
 
     def successorsAndCosts(self, state: State) -> List[Tuple[str, State, float]]:
         # BEGIN_YOUR_CODE (our solution is 13 lines of code, but don't worry if you deviate from this)
         succ = []
-        set_tags = set(self.waypointTags)
+        set_tags = frozenset(self.waypointTags_set)
         for n_location, distance in self.cityMap.distances[state.location].items():
-            list_tags = [c for c in self.cityMap.tags[n_location] if c in set_tags]
-            succ.append((n_location, State(location=n_location, memory=state.memory + tuple(list_tags)), distance))
+            succ.append((n_location, State(location=n_location, memory=tuple(frozenset(state.memory) | (frozenset(self.cityMap.tags[n_location]) & set_tags))), distance))
         return succ
 
         # END_YOUR_CODE
@@ -162,25 +162,27 @@ def aStarReduction(problem: SearchProblem, heuristic: Heuristic) -> SearchProble
     class NewSearchProblem(SearchProblem):
         def __init__(self):
             # BEGIN_YOUR_CODE (our solution is 3 line of code, but don't worry if you deviate from this)
-            raise NotImplementedError("Override me")
-            self.startLocation
-            self.endTag
-            self.cityMap
+            self.startLocation = problem.startLocation
+            self.endTag = problem.endTag
+            self.cityMap = problem.cityMap
             # END_YOUR_CODE
 
         def startState(self) -> State:
             # BEGIN_YOUR_CODE (our solution is 1 line of code, but don't worry if you deviate from this)
-            raise NotImplementedError("Override me")
+            return State(location=self.startLocation)
             # END_YOUR_CODE
 
         def isEnd(self, state: State) -> bool:
             # BEGIN_YOUR_CODE (our solution is 1 line of code, but don't worry if you deviate from this)
-            raise NotImplementedError("Override me")
+            return self.endTag in self.cityMap.tags[state.location]
             # END_YOUR_CODE
 
         def successorsAndCosts(self, state: State) -> List[Tuple[str, State, float]]:
             # BEGIN_YOUR_CODE (our solution is 7 lines of code, but don't worry if you deviate from this)
-            raise NotImplementedError("Override me")
+            succ = []
+            for n_location, distance in self.cityMap.distances[state.location].items():
+                succ.append((n_location, State(n_location), distance + heuristic.evaluate(State(n_location))))
+            return succ
             # END_YOUR_CODE
 
     return NewSearchProblem()
@@ -198,15 +200,23 @@ class StraightLineHeuristic(Heuristic):
     def __init__(self, endTag: str, cityMap: CityMap):
         self.endTag = endTag
         self.cityMap = cityMap
-
         # Precompute
         # BEGIN_YOUR_CODE (our solution is 4 lines of code, but don't worry if you deviate from this)
-        raise NotImplementedError("Override me")
+        self.endLocation = []
+        for key, element in self.cityMap.tags.items():
+            if self.endTag in element:
+                self.endLocation.append(key)
+        print(self.endLocation)
         # END_YOUR_CODE
 
     def evaluate(self, state: State) -> float:
         # BEGIN_YOUR_CODE (our solution is 6 lines of code, but don't worry if you deviate from this)
-        raise NotImplementedError("Override me")
+        g1 = self.cityMap.geoLocations[state.location]
+        minDistance = float("inf")
+        for i in self.endLocation:
+            g2 = self.cityMap.geoLocations[i]
+            minDistance =  computeDistance(g1, g2) if computeDistance(g1, g2) < minDistance else minDistance
+        return minDistance
         # END_YOUR_CODE
 
 
