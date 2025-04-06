@@ -8,9 +8,39 @@ from mapUtil import (
     locationFromTag,
     makeTag,
 )
-from util import Heuristic, SearchProblem, State, UniformCostSearch
+from util import Heuristic, SearchProblem, State, UniformCostSearch, PriorityQueue
 
 # BEGIN_YOUR_CODE (You may add some codes here to assist your coding below if you want, but don't worry if you deviate from this.)
+class uni_with_return(UniformCostSearch):
+    def __init__(self, verbose = 0):
+        super().__init__(verbose)
+        self.path = {}
+    def solve(self, problem: SearchProblem) -> None:
+        # Initialize data structures
+        frontier = PriorityQueue()  # Explored states are maintained by the frontier.
+        backpointers = {}           # Map state -> previous state.
+
+        # Add the start state
+        startState = problem.startState()
+        frontier.update(startState, 0.0)
+
+        while True:
+            # Remove the state from the queue with the lowest pastCost (priority).
+            state, pastCost = frontier.removeMin()
+            if state is None and pastCost is None:
+                return
+
+            # Update tracking variables
+            self.pastCosts[state] = pastCost
+            self.numStatesExplored += 1
+            self.path[state.location] = pastCost
+
+            # Expand from `state`, updating the frontier with each `newState`
+            for action, newState, cost in problem.successorsAndCosts(state):
+
+                if frontier.update(newState, pastCost + cost):
+                    # We found better way to go to `newState` --> update backpointer!
+                    backpointers[newState] = (action, state)
 
 # END_YOUR_CODE
 
@@ -181,7 +211,7 @@ def aStarReduction(problem: SearchProblem, heuristic: Heuristic) -> SearchProble
             # BEGIN_YOUR_CODE (our solution is 7 lines of code, but don't worry if you deviate from this)
             succ = []
             for n_location, distance in self.cityMap.distances[state.location].items():
-                succ.append((n_location, State(n_location), distance + heuristic.evaluate(State(n_location))))
+                succ.append((n_location, State(n_location), distance + heuristic.evaluate(State(n_location)) - heuristic.evaluate(state)))
             return succ
             # END_YOUR_CODE
 
@@ -206,7 +236,6 @@ class StraightLineHeuristic(Heuristic):
         for key, element in self.cityMap.tags.items():
             if self.endTag in element:
                 self.endLocation.append(key)
-        print(self.endLocation)
         # END_YOUR_CODE
 
     def evaluate(self, state: State) -> float:
@@ -215,7 +244,7 @@ class StraightLineHeuristic(Heuristic):
         minDistance = float("inf")
         for i in self.endLocation:
             g2 = self.cityMap.geoLocations[i]
-            minDistance =  computeDistance(g1, g2) if computeDistance(g1, g2) < minDistance else minDistance
+            minDistance =  computeDistance(g2, g1) if computeDistance(g2, g1) < minDistance else minDistance
         return minDistance
         # END_YOUR_CODE
 
@@ -232,12 +261,32 @@ class NoWaypointsHeuristic(Heuristic):
     def __init__(self, endTag: str, cityMap: CityMap):
         # Precompute
         # BEGIN_YOUR_CODE (our solution is 14 lines of code, but don't worry if you deviate from this)
-        raise NotImplementedError("Override me")
+        self.endTag = endTag
+        self.cityMap = cityMap
+        self.endLocation = []
+        for key, element in self.cityMap.tags.items():
+            if self.endTag in element:
+                self.endLocation.append(key)
+        #print(self.endLocation)
+        self.locationToDistance = {}
+        for endLocation in self.endLocation:
+            temp = {}
+            search = uni_with_return()
+            search.solve(ShortestPathProblem(endLocation, 'label='+endLocation, self.cityMap))
+            
+            temp = search.path
+            #print(temp)
+            self.locationToDistance[endLocation] = temp
+        #print(self.locationToDistance)
+        #print(self.locationToDistance)
         # END_YOUR_CODE
 
     def evaluate(self, state: State) -> float:
         # BEGIN_YOUR_CODE (our solution is 1 line of code, but don't worry if you deviate from this)
-        raise NotImplementedError("Override me")
+        #print(state)
+        a = [self.locationToDistance[endLocation][state.location] for endLocation in self.endLocation]
+        print(a)
+        return len(a)
         # END_YOUR_CODE
 
 
