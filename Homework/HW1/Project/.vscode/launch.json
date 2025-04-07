@@ -9,7 +9,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
-            "args": ["1a-1-basic"],
+            "args": ["3e-astar-1-basic"],
         }
     ]
 }

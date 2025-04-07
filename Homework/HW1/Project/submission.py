@@ -199,20 +199,22 @@ def aStarReduction(problem: SearchProblem, heuristic: Heuristic) -> SearchProble
 
         def startState(self) -> State:
             # BEGIN_YOUR_CODE (our solution is 1 line of code, but don't worry if you deviate from this)
-            return State(location=self.startLocation)
+            return problem.startState()
             # END_YOUR_CODE
 
         def isEnd(self, state: State) -> bool:
             # BEGIN_YOUR_CODE (our solution is 1 line of code, but don't worry if you deviate from this)
-            return self.endTag in self.cityMap.tags[state.location]
+            return problem.isEnd(state)
             # END_YOUR_CODE
 
         def successorsAndCosts(self, state: State) -> List[Tuple[str, State, float]]:
             # BEGIN_YOUR_CODE (our solution is 7 lines of code, but don't worry if you deviate from this)
-            succ = []
-            for n_location, distance in self.cityMap.distances[state.location].items():
-                succ.append((n_location, State(n_location), distance + heuristic.evaluate(State(n_location)) - heuristic.evaluate(state)))
-            return succ
+            succ = problem.successorsAndCosts(state)
+            succ_new = []
+            for t in succ:
+                t_location, t_state, t_distance = t[0], t[1], t[2]
+                succ_new.append((t_location, t_state, t_distance + heuristic.evaluate(State(t_location)) - heuristic.evaluate(state)))
+            return succ_new
             # END_YOUR_CODE
 
     return NewSearchProblem()
@@ -267,26 +269,18 @@ class NoWaypointsHeuristic(Heuristic):
         for key, element in self.cityMap.tags.items():
             if self.endTag in element:
                 self.endLocation.append(key)
-        #print(self.endLocation)
         self.locationToDistance = {}
-        for endLocation in self.endLocation:
-            temp = {}
+        for end in self.endLocation:
             search = uni_with_return()
-            search.solve(ShortestPathProblem(endLocation, 'label='+endLocation, self.cityMap))
-            
+            search.solve(ShortestPathProblem(end, 'label='+end, self.cityMap))
             temp = search.path
-            #print(temp)
-            self.locationToDistance[endLocation] = temp
-        #print(self.locationToDistance)
-        #print(self.locationToDistance)
+            self.locationToDistance[end] = temp
         # END_YOUR_CODE
 
     def evaluate(self, state: State) -> float:
         # BEGIN_YOUR_CODE (our solution is 1 line of code, but don't worry if you deviate from this)
-        #print(state)
-        a = [self.locationToDistance[endLocation][state.location] for endLocation in self.endLocation]
-        print(a)
-        return len(a)
+        a = [self.locationToDistance[end][state.location] for end in self.endLocation]
+        return min(a)
         # END_YOUR_CODE
 
 
@@ -300,7 +294,7 @@ def getHefeiShortestPathProblem(cityMap: CityMap) -> ShortestPathProblem:
     startLocation=locationFromTag(makeTag("landmark", "USTC"), cityMap)
     endTag=makeTag("landmark", "Chaohu")
     # BEGIN_YOUR_CODE (our solution is 1 lines of code, but don't worry if you deviate from this)
-    raise NotImplementedError("Override me")
+    return ShortestPathProblem(startLocation, endTag, cityMap)
     # END_YOUR_CODE
 
 def getHefeiShortestPathProblem_withHeuristic(cityMap: CityMap) -> ShortestPathProblem:
@@ -310,5 +304,6 @@ def getHefeiShortestPathProblem_withHeuristic(cityMap: CityMap) -> ShortestPathP
     startLocation=locationFromTag(makeTag("landmark", "USTC"), cityMap)
     endTag=makeTag("landmark", "Chaohu")
     # BEGIN_YOUR_CODE (our solution is 2 lines of code, but don't worry if you deviate from this)
-    raise NotImplementedError("Override me")
+    probelm = ShortestPathProblem(startLocation, endTag, cityMap)
+    return aStarReduction(probelm, StraightLineHeuristic(endTag, cityMap)) 
     # END_YOUR_CODE
