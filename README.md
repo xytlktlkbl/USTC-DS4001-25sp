@@ -34,6 +34,7 @@
 | Class1 | classification |
 | Class2 |      FNN       |
 | Class3 |      CNN       |
+| Class4 | Intro to RL    |
 
 
 
