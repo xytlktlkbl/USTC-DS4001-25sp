@@ -1,0 +1,204 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsthm,amsmath,amssymb}
+\usepackage[UTF8]{ctex}
+\usepackage[tc]{titlepic}
+\usepackage{titlesec}
+\usepackage{cite}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{subfigure}
+\usepackage{float}
+\usepackage[textwidth=14.5cm]{geometry}
+\usepackage[section]{placeins}
+\usepackage{makeidx}
+\usepackage{mathrsfs}
+\usepackage{color}
+\usepackage{ulem}
+\usepackage{enumitem}
+\geometry{a4paper,scale=0.8,left=2cm,right=2cm}
+\pagestyle{fancy}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{tcolorbox}
+\usepackage{listings}
+
+\lstset{
+    language=Python, % 指定编程语言，如 Python、Java、C++ 等
+    basicstyle=\footnotesize\ttfamily, % 调小字体大小
+    keywordstyle=\color{blue}, % 关键字颜色
+    commentstyle=\color{green!50!black}, % 注释颜色
+    stringstyle=\color{red}, % 字符串颜色
+    numbers=left, % 行号显示位置，left 表示在左侧显示
+    numberstyle=\tiny\color{gray}, % 行号字体样式
+    stepnumber=1, % 行号递增步长
+    numbersep=5pt, % 行号与代码之间的间距
+    backgroundcolor=\color{gray!10}, % 代码块背景颜色
+    showspaces=false, % 不显示空格
+    showstringspaces=false, % 不显示字符串中的空格
+    showtabs=false, % 不显示制表符
+    tabsize=2 % 制表符宽度
+}
+
+
+% 定义一个自定义命令，参数 #1 为中间的文字
+\newcommand{\sectiondivider}[1]{%
+  \vspace{1em} % 上下间距，可根据需要调整
+  \begin{center}
+    \noindent
+    \makebox[0.3\linewidth]{\hrulefill}%
+    \hspace{0.5em}% 左右间距
+    {\Large\textbf{#1}}%
+    \hspace{0.5em}%
+    \makebox[0.3\linewidth]{\hrulefill}%
+  \end{center}
+  \vspace{3em}
+}
+
+
+\lhead{第 2 次作业\\\today}
+\chead{中国科学技术大学\\	DS4001 人工智能原理与技术}
+
+\rhead{Homework 2\\ {\CTEXoptions[today=old]\today}}
+\newcommand{\upcite}[1]{\textsuperscript{\cite{#1}}}
+
+\titleformat*{\section}{\bfseries\Large}
+\titleformat*{\subsection}{\bfseries\large}
+
+\title{\bfseries DS4001-25SP-HW2：搜索}
+\author{姓名\quad PB}
+
+\begin{document}
+%\begin{sloopypar}
+\maketitle
+% \clearpage
+
+
+% Problem 1
+\section{问题 1：马尔可夫决策过程[9\%=6\%+3\%]}
+
+\begin{enumerate}[label=(\alph*), start=1]
+    
+    \item TODO %1a
+    
+    \item TODO %1b
+
+\end{enumerate}
+\
+
+% Problem 2
+\section{问题 2：Q-Learning[12\%=3\%+6\%+3\%]}
+
+\begin{enumerate}[label=(\alph*), start=1]
+
+    \item TODO %2a
+    
+    \item TODO %2b
+    
+    \item TODO %2c
+    
+\end{enumerate}
+\
+
+% Problem 3
+\section{问题 3：Gobang Programming[53\%=33\%+10\%+10\%]}
+
+
+\begin{enumerate}[label=(\alph*), start=1]
+    \item \textbf{[代码]} %3a
+    % get_next_state 5分
+    \begin{lstlisting}[language=Python]
+def get_next_state(self, action: Tuple[int, int, int], noise: Tuple[int, int, int]):
+    # BEGIN_YOUR_CODE (our solution is 3 line of code, but don't worry if you deviate from this)
+
+    # END_YOUR_CODE
+
+    if noise is not None:
+        white, x_white, y_white = noise
+        next_state[x_white][y_white] = white
+    return next_state
+    \end{lstlisting}
+    
+    % sample_noise 3分
+    \begin{lstlisting}[language=Python]
+def sample_noise(self):
+    if self.action_space:
+        # BEGIN_YOUR_CODE (our solution is 2 line of code, but don't worry if you deviate from this)
+
+        # END_YOUR_CODE
+        return 2, x, y
+    else:
+        return None
+    \end{lstlisting}
+
+    % get_connection_and_reward 5分
+    \begin{lstlisting}[language=Python]
+def get_connection_and_reward(self, action: Tuple[int, int, int], noise: Tuple[int, int, int]):
+    # BEGIN_YOUR_CODE (our solution is 4 line of code, but don't worry if you deviate from this)
+
+    # END_YOUR_CODE
+
+    return black_1, white_1, black_2, white_2, reward
+    \end{lstlisting}
+
+    % sample_action_and_noise 8分
+    \begin{lstlisting}[language=Python]
+def sample_action_and_noise(self, eps: float):
+    # BEGIN_YOUR_CODE (our solution is 8 line of code, but don't worry if you deviate from this)
+
+    # END_YOUR_CODE
+    return action, self.sample_noise()
+    \end{lstlisting}
+
+    % q_learning_update 12分
+    \begin{lstlisting}[language=Python]
+def q_learning_update(self, s0_: np.array, action: Tuple[int, int, int], s1_: np.array, reward: float,
+                          alpha_0: float = 1):
+    s0, s1 = self.array_to_hashable(s0_), self.array_to_hashable(s1_)
+    self.s_a_visited[(s0, action)] = 1 if (s0, action) not in self.s_a_visited else \
+        self.s_a_visited[(s0, action)] + 1
+    alpha = alpha_0 / self.s_a_visited[(s0, action)]
+
+    # BEGIN_YOUR_CODE (our solution is 18 line of code, but don't worry if you deviate from this)
+
+    # END_YOUR_CODE
+    \end{lstlisting}
+
+    \item TODO % 3b
+
+    \item TODO % 3c
+\end{enumerate}
+\
+
+% Problem 4
+\section{问题 4：Deeper Understanding[16\%=5\%+5\%+2\%+4\%]}
+\subsection{Bellman 算子与压缩映射}
+\begin{enumerate}[label=(\alph*), start=1]
+    
+    \item TODO % 4.1 a
+    
+    \item TODO % 4.1 b
+    
+\end{enumerate}
+
+\subsection{重要性采样}
+\begin{enumerate}[label=(\alph*), start=1]
+    
+    \item TODO % 4.2 a
+    
+    \item TODO % 4.2 b
+    
+\end{enumerate}
+\
+
+\section*{体验反馈[10\%]}
+
+\begin{enumerate}[label=(\alph*), start=1]
+    \item \textbf{[必做]} %所花时间
+    你的答案
+    \item \textbf{[选做]} %其他反馈
+    你的答案
+\end{enumerate}
+
+
+\end{document}
