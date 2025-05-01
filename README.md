@@ -24,6 +24,7 @@
 | :----------: | :---: | :------: |
 |     HW0      | intro |    \     |
 |     HW1      |Search |   4.10   |
+|     HW2      |   RL  |   5.8    |
 
 
 
@@ -34,6 +35,7 @@
 | Class1 | classification |
 | Class2 |      FNN       |
 | Class3 |      CNN       |
+| Class4 | Intro to RL    |
 
 
 
