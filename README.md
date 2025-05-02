@@ -36,6 +36,7 @@
 | Class2 |      FNN       |
 | Class3 |      CNN       |
 | Class4 | Intro to RL    |
+| Class5 | How to strengthen your model's performance |
 
 
 
