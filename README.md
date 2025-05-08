@@ -20,11 +20,12 @@
 
 ## 作业列表
 
-| homework/lab | topic | deadline |
-| :----------: | :---: | :------: |
-|     HW0      | intro |    \     |
-|     HW1      |Search |   4.10   |
-|     HW2      |   RL  |   5.8    |
+| homework/lab |   topic   | deadline |
+| :----------: | :-------: | :------: |
+|     HW0      |   intro   |    \     |
+|     HW1      |  Search   |   4.10   |
+|     HW2      |    RL     |   5.8    |
+|     HW3      | Bayes Net |   5.30   |
 
 
 

@@ -1,0 +1,149 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsthm,amsmath,amssymb}
+\usepackage[UTF8]{ctex}
+\usepackage[tc]{titlepic}
+\usepackage{titlesec}
+\usepackage{cite}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{subfigure}
+\usepackage{float}
+\usepackage[textwidth=14.5cm]{geometry}
+\usepackage[section]{placeins}
+\usepackage{makeidx}
+\usepackage{mathrsfs}
+\usepackage{color}
+\usepackage{ulem}
+\usepackage{enumitem}
+\geometry{a4paper,scale=0.8,left=2cm,right=2cm}
+\pagestyle{fancy}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{tcolorbox}
+\usepackage{listings}
+
+\lstset{
+    language=Python, % 指定编程语言，如 Python、Java、C++ 等
+    basicstyle=\footnotesize\ttfamily, % 调小字体大小
+    keywordstyle=\color{blue}, % 关键字颜色
+    commentstyle=\color{green!50!black}, % 注释颜色
+    stringstyle=\color{red}, % 字符串颜色
+    numbers=left, % 行号显示位置，left 表示在左侧显示
+    numberstyle=\tiny\color{gray}, % 行号字体样式
+    stepnumber=1, % 行号递增步长
+    numbersep=5pt, % 行号与代码之间的间距
+    backgroundcolor=\color{gray!10}, % 代码块背景颜色
+    showspaces=false, % 不显示空格
+    showstringspaces=false, % 不显示字符串中的空格
+    showtabs=false, % 不显示制表符
+    tabsize=2 % 制表符宽度
+}
+
+
+% 定义一个自定义命令，参数 #1 为中间的文字
+\newcommand{\sectiondivider}[1]{%
+  \vspace{1em} % 上下间距，可根据需要调整
+  \begin{center}
+    \noindent
+    \makebox[0.3\linewidth]{\hrulefill}%
+    \hspace{0.5em}% 左右间距
+    {\Large\textbf{#1}}%
+    \hspace{0.5em}%
+    \makebox[0.3\linewidth]{\hrulefill}%
+  \end{center}
+  \vspace{3em}
+}
+
+
+\lhead{第 3 次作业\\\today}
+\chead{中国科学技术大学\\	DS4001 人工智能原理与技术}
+
+\rhead{Homework 3\\ {\CTEXoptions[today=old]\today}}
+\newcommand{\upcite}[1]{\textsuperscript{\cite{#1}}}
+
+\titleformat*{\section}{\bfseries\Large}
+\titleformat*{\subsection}{\bfseries\large}
+
+\title{\bfseries DS4001-25SP-HW3：贝叶斯网络}
+\author{姓名\quad PB00000001}
+
+\begin{document}
+%\begin{sloopypar}
+\maketitle
+% \clearpage
+
+\section{马尔可夫链[24\%]}
+\subsection{回答问题[20\%]}
+\subsubsection{手动计算[4\%]}
+
+\begin{enumerate}
+    
+    \item[1.] TODO 
+    
+    \item[2.] TODO 
+
+    \item[3.] TODO 
+
+\end{enumerate}
+
+\subsubsection{代码填空与参数估计[16\%]}
+TODO：code + figure
+
+
+\subsubsection{运行结果对比[4\%]}
+TODO
+
+
+
+\section{贝叶斯网络[64\%]}
+\subsection{贝叶斯网络：推理[54\%]}
+\subsubsection{精确推理[16\%]}
+
+\begin{lstlisting}[language=Python]
+your code
+\end{lstlisting}
+
+
+
+\subsubsection{模糊推理[16\%]}
+
+\begin{lstlisting}[language=Python]
+your code
+\end{lstlisting}
+
+
+
+
+\subsubsection{粒子滤波[16\%]}
+
+\begin{lstlisting}[language=Python]
+your code
+\end{lstlisting}
+
+
+
+\subsubsection{思考题[6\%]}
+TODO
+
+\subsection{贝叶斯网络：学习[10\%]}
+TODO
+
+\section{贝叶斯深度学习[6\%]}
+
+TODO
+
+
+
+
+\section*{体验反馈[6\%]}
+
+\begin{enumerate}[label=(\alph*), start=1]
+    \item \textbf{[必做]} %所花时间
+    TODO
+    \item \textbf{[选做]} %其他反馈
+    TODO
+\end{enumerate}
+
+
+\end{document}
