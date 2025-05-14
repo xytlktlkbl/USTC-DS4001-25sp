@@ -99,7 +99,7 @@ class BWtrainer:
             xi[t] = alpha[t][:, None] * self.A * self.B[:, seq[t+1]] * beta[t+1]
             xi[t] /= xi[t].sum()  
 
-        return gamma, xi.sum(axis=0) 
+        return gamma, xi 
 
     @property
     def parameters(self):
