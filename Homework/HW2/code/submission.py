@@ -79,7 +79,8 @@ class Gobang(UtilGobang):
         """
 
         # BEGIN_YOUR_CODE (our solution is 3 line of code, but don't worry if you deviate from this)
-
+        next_state = copy.deepcopy(self.board)
+        next_state[action[1]][action[2]] = action[0]
         # END_YOUR_CODE
 
         if noise is not None:
@@ -95,7 +96,8 @@ class Gobang(UtilGobang):
         """
         if self.action_space:
             # BEGIN_YOUR_CODE (our solution is 2 line of code, but don't worry if you deviate from this)
-
+            x, y = random.choice(self.action_space)
+            self.action_space.remove((x, y))
             # END_YOUR_CODE
             return 2, x, y
         else:
@@ -115,7 +117,9 @@ class Gobang(UtilGobang):
         """
 
         # BEGIN_YOUR_CODE (our solution is 4 line of code, but don't worry if you deviate from this)
-
+        black_1, white_1 = self.count_max_connections(self.board)
+        black_2, white_2 = self.count_max_connections(self.get_next_state(action, noise))
+        reward = black_2**2 - white_2**2 - black_1**2 + white_1**2
         # END_YOUR_CODE
 
         return black_1, white_1, black_2, white_2, reward
@@ -150,7 +154,19 @@ class Gobang(UtilGobang):
         """
 
         # BEGIN_YOUR_CODE (our solution is 8 line of code, but don't worry if you deviate from this)
-
+        p = random.randint(0, 100)
+        act = random.choice(self.action_space)
+        if p > eps * 100:
+            x, y = self.action_space[0]
+            idx = self.array_to_hashable(self.board)
+            max_q = -100
+            for x, y in self.action_space:
+                if idx in self.Q and (1, x, y) in self.Q[idx]:
+                    if self.Q[idx][(1, x, y)] > max_q:
+                        max_q = self.Q[idx][(1, x, y)]
+                        act = (x, y)
+        self.action_space.remove(act)
+        action = (1, act[0], act[1])
         # END_YOUR_CODE
         return action, self.sample_noise()
 
@@ -174,5 +190,17 @@ class Gobang(UtilGobang):
         alpha = alpha_0 / self.s_a_visited[(s0, action)]
 
         # BEGIN_YOUR_CODE (our solution is 18 line of code, but don't worry if you deviate from this)
+        gamma = self.gamma
+        if s1 not in self.Q:
+            self.Q[s1] = {}
+        v_s1 = 0
+        if self.Q[s1]!= {}:
+            v_s1 = max(self.Q[s1].values())
+        if s0 not in self.Q:
+            self.Q[s0] = {}
+        if action not in self.Q[s0]:
+            self.Q[s0][action] = alpha * (reward + gamma * v_s1)
+        else:
+            self.Q[s0][action] = (1 - alpha) * self.Q[s0][action] + alpha * (reward + gamma * v_s1)
 
         # END_YOUR_CODE
