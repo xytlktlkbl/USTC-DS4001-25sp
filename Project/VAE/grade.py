@@ -31,7 +31,7 @@ def grade():
         print("********** VAEwolabel **********")
         recon_path = os.path.join(args.VAEwolabel_output_dir, "recon")
         with open(os.path.join(args.VAEwolabel_output_dir, "hyperparams.json"), 'r') as f:
-            hyperparams = json.load(f, indent=4)
+            hyperparams = json.load(f)
         print("Calculating MSE score and SSIM score ...")
         ssim_score = 0.
         mse_score = 0.
@@ -51,7 +51,7 @@ def grade():
         print("********** Genwithlabel **********")
         recon_path = os.path.join(args.Genwithlabel_output_dir, "recon")
         with open(os.path.join(args.Genwithlabel_output_dir, "hyperparams.json"), 'r') as f:
-            hyperparams = json.load(f, indent=4)
+            hyperparams = json.load(f)
         print("Calculating MSE score , SSIM score and FID score ...")
         ssim_score = 0.
         mse_score = 0.
