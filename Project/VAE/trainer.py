@@ -145,7 +145,7 @@ var: {var}, total training data: {len(self.train_dataset)}, total validation dat
             "trainable_parameters": params_num
         }
         with open(os.path.join(self.save_dir, "hyperparams.json"), "w") as f:
-            json.dump(hyperparams, indent=4)
+            json.dump(hyperparams, f, indent=4)
 
     def load_latest_checkpoint(self):
         """ Load the latest checkpoint in save_dir. """
