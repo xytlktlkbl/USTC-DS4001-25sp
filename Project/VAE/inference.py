@@ -38,6 +38,7 @@ def generate_images(model, inf_num, latent_dim, save_dir, device):
         for i in range(inf_num // 10):
             z = torch.randn(1, latent_dim).to(device)
             z = z.to(device)
+            label = torch.tensor(label).to(device)
             with torch.no_grad():
                 generated_image = model.decode(z, label).cpu()
             generated_image = (generated_image.numpy() * 255).astype(np.uint8)
@@ -70,6 +71,7 @@ def main():
     os.makedirs(os.path.join(args.save_dir, 'recon'), exist_ok=True)
     for batch_idx, (images, labels) in tqdm(enumerate(inf_dataloader)):
         images = images.to(device)
+        labels = labels.to(device)
         with torch.no_grad():
             recon_x, _, _ = model(images, labels)
         save_reconstructed(recon_x, os.path.join(args.save_dir, 'recon'), batch_idx, batch_size=args.batch_size)
