@@ -42,7 +42,7 @@ def grade():
             mse_score += mean_squared_error(anc_img / 255., gen_img / 255.)
         ssim_score /= len(grd_dataset)
         mse_score /= len(grd_dataset)
-        bonus = 0.5 + 1.0 - hyperparams["latent_dim"]/784 
+        bonus = 0.2 + 1.0 - hyperparams["latent_dim"]/784 
         score = min((ssim_score * 5 + max(0.1 - mse_score, 0.) * 50) * bonus, 10)
         res["VAEwolabel"] = {"ssim": ssim_score, "mse": mse_score, "score": score}
 
@@ -74,7 +74,7 @@ def grade():
                 gen_with_labels[label].append(np.array(gen_img))   
 
         fid_score = cal_fid(gen_with_labels, anc_with_labels)
-        bonus = 0.5 + 1.0 - hyperparams["latent_dim"]/784 
+        bonus = 0.2 + 1.0 - hyperparams["latent_dim"]/784 
 
         score = min((ssim_score * 10 + max(0.1 - mse_score, 0.) * 100 + max(10. - fid_score, 0.)) * bonus, 30)
 
