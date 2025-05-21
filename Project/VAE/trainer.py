@@ -67,7 +67,7 @@ var: {var}, total training data: {len(self.train_dataset)}, total validation dat
             total_loss = 0
             for batch_idx, (images, labels) in enumerate(self.train_dataloader):
                 self.cur_step += 1
-                images = images.to(self.device).view(-1, 28, 28)
+                images = images.to(self.device).view(-1, 1, 28, 28)
                 labels = labels.to(self.device)
                 
                 self.optimizer.zero_grad()
