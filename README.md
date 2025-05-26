@@ -20,11 +20,15 @@
 
 ## 作业列表
 
-| homework/lab | topic | deadline |
-| :----------: | :---: | :------: |
-|     HW0      | intro |    \     |
-|     HW1      |Search |   4.10   |
-|     HW2      |   RL  |   5.8    |
+| homework/lab |   topic   | deadline |
+| :----------: | :-------: | :------: |
+|     HW0      |   intro   |    \     |
+|     HW1      |  Search   |   4.10   |
+|     HW2      |    RL     |   5.8    |
+|     HW3      | Bayes Net |   5.30   |
+|   Project    |    VAE    |   6.27   |
+
+> 注：请在5.24日前完成大作业组队，并在群里表格中填写信息！
 
 
 
@@ -36,6 +40,7 @@
 | Class2 |      FNN       |
 | Class3 |      CNN       |
 | Class4 | Intro to RL    |
+| Class5 | How to strengthen your model's performance |
 
 
 
