@@ -62,14 +62,12 @@ class BWtrainer:
         T = len(seq)
         alpha = np.zeros((T, self.n_states))
         scaling_factors = np.zeros(T) 
-        
         # 初始化第一个时间步
-        alpha[0] = ## fill in this blank with an expression ##
+        alpha[0] = self.pi * self.B[:, seq[0]]  ## fill in this blank with an expression ##
         scaling_factors[0] = np.sum(alpha[0]) 
         alpha[0] /= scaling_factors[0]  
-        
         for t in range(1, T):
-            alpha[t] =  ## fill in this blank with an expression ##
+            alpha[t] = [np.sum(alpha[t-1] * self.A[:, j]) * self.B[j][seq[t]] for j in range(self.n_states)]  ## fill in this blank with an expression ##
             scaling_factors[t] = np.sum(alpha[t]) 
             alpha[t] /= scaling_factors[t]  
             
@@ -85,7 +83,7 @@ class BWtrainer:
         beta[T-1] /= scaling_factors[T-1] 
         
         for t in range(T-2, -1, -1):
-            beta[t] =  ## fill in this blank with an expression ##
+            beta[t] = [np.sum(self.A[i] * self.B[:, seq[t+1]] * beta[t+1]) for i in range(self.n_states)]  ## fill in this blank with an expression ##
             beta[t] /= scaling_factors[t]  
 
         return beta
