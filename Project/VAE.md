@@ -110,7 +110,7 @@ $$
 
 最后我们的损失函数可以化简为（这里不用你来推导，感兴趣可以自行尝试，只是一个代入表达式化简的过程，高斯分布之间的KL散度上面已经给出过）
 
-$\mathcal{L}(\theta, \phi, \textbf{x}) = \sum_{i=1}^d\frac{1}{2}(-1 + (\sigma_\phi^{(i)})^2 + (\mu_\phi^{(i)})^2 - \log (\sigma_\phi^{(i)})^2) + \frac{1}{2\sigma^2}||\textbf{x} - \textbf{z}||_2^2$
+$\mathcal{L}(\theta, \phi, \textbf{x}) = \sum_{i=1}^d\frac{1}{2}(-1 + (\sigma_\phi^{(i)})^2 + (\mu_\phi^{(i)})^2 - \log (\sigma_\phi^{(i)})^2) + \frac{1}{2\sigma^2}||\textbf{x} - \mathcal{D}(\textbf{z})||_2^2$
 
 注：这里需要一个叫做重参数化技巧(reparameterization trick)，因为这里的$\textbf{z}$是隐藏code的一个采样，所以不能直接使用采样的方式来进行使用，否则梯度无法反向传播回去，但我们知道$\textbf{z}|\textbf{x}$的分布，所以完全可以合成一下
 
