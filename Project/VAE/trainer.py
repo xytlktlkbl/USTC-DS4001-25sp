@@ -64,7 +64,6 @@ var: {var}, total training data: {len(self.train_dataset)}, total validation dat
         pbar = tqdm(range(self.epochs), desc="Epoch", dynamic_ncols=True)
         
         for epoch in pbar:
-            total_loss = 0
             for batch_idx, (images, labels) in enumerate(self.train_dataloader):
                 self.cur_step += 1
                 images = images.to(self.device).view(-1, 1, 28, 28)
@@ -76,7 +75,6 @@ var: {var}, total training data: {len(self.train_dataset)}, total validation dat
                 loss.backward()
                 self.optimizer.step()
                 
-                total_loss += loss.item() + images.size(0)
                 train_loss_list.append(loss.item())
                 
                 if self.cur_step % self.pred_step == 0:
@@ -84,8 +82,6 @@ var: {var}, total training data: {len(self.train_dataset)}, total validation dat
 
                 # Update the progress bar with current training loss
                 pbar.set_postfix(train_loss=loss.item(), valid_loss=valid_loss_list[-1])
-
-            avg_loss = total_loss / len(self.train_dataloader)
             
             # Save checkpoint
             self.save_checkpoint(epoch+1)
