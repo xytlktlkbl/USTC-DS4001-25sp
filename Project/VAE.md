@@ -209,7 +209,7 @@ python inference.py --task VAEwolabel --latent_dim 20 --checkpoint_path YOUR CHE
 我们的计算公式为：
 
 + 对于VAE生成任务：$Grade = \min((ssim * 5 + \max((0.1 - mse), 0) * 50) * bonus, 10)$
-+ 对于Gen生成任务：$Grade = \min((ssim * 10 + \max(0.1 - mse, 0) * 100 + \max(10 - fid, 0)) * bonus, 10)$
++ 对于Gen生成任务：$Grade = \min((ssim * 10 + \max(0.1 - mse, 0) * 100 + \max(10 - fid, 0)) * bonus, 30)$
 + 其中这个$bonus$是对压缩率的影响的一个系数，压缩率$R = 1 - \frac{latent\_dim}{784}$，$bonus = 0.2 + R$
 
 > 设置bonus的意义在于，能够在保证重构、生成质量的情况下，体现出图像压缩的功能，防止比如说，隐藏层的维度就设置成784，encoder,decoder就是两个单位阵，来满足完全一比一照搬的情况（这样照搬虽然能做重构任务，但做不了生成任务，而且也毫无实际意义）
