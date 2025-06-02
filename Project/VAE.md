@@ -73,7 +73,7 @@ $$
 
 $\theta^* = \arg \min_\theta D_{KL}(p_{data} || p_\theta)$
 
-+ 推导$\theta^* = \arg \max_\theta \mathbb{E}_{x \sim p_{data}}[p_\theta(\textbf{x})]$**(10pt)**
++ 推导$\theta^* = \arg \max_\theta \mathbb{E}_{x \sim p_{data}}[\log p_\theta(\textbf{x})]$**(10pt)**
 
 
 这个式子对于实际的操作就方便太多了，这里的期望我们可以通过采样来近似，我们从$p_{data}$中直接采样即可，然后通过对数似然的方法优化，也就是从数据集中随机采样$\{\textbf{x}^1, \textbf{x}^2, \textbf{x}^3, \cdots, \textbf{x}^m\}$，来最大化$\sum_{i=1}^m \log p_\theta(\textbf{x}^i|\theta)$
@@ -110,7 +110,7 @@ $$
 
 最后我们的损失函数可以化简为（这里不用你来推导，感兴趣可以自行尝试，只是一个代入表达式化简的过程，高斯分布之间的KL散度上面已经给出过）
 
-$\mathcal{L}(\theta, \phi, \textbf{x}) = \sum_{i=1}^d\frac{1}{2}(-1 + (\sigma_\phi^{(i)})^2 + (\mu_\phi^{(i)})^2 - \log (\sigma_\phi^{(i)})^2) + \frac{1}{2\sigma^2}||\textbf{x} - \mathcal{D}(\textbf{z})||_2^2$
+$\mathcal{L}(\theta, \phi, \textbf{x}) = \sum_{i=1}^d\frac{1}{2}(-1 + (\sigma_\phi^{(i)})^2 + (\mu_\phi^{(i)})^2 - \log (\sigma_\phi^{(i)})^2) + \frac{1}{2\sigma^2}||\textbf{x} - \mu_{\theta}(\textbf{z})||_2^2$
 
 注：这里需要一个叫做重参数化技巧(reparameterization trick)，因为这里的$\textbf{z}$是隐藏code的一个采样，所以不能直接使用采样的方式来进行使用，否则梯度无法反向传播回去，但我们知道$\textbf{z}|\textbf{x}$的分布，所以完全可以合成一下
 
