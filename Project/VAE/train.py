@@ -61,7 +61,8 @@ def main():
         save_dir=save_dir,
         load_from_checkpoint=args.load_from_checkpoint,
         pred_step=args.pred_step, 
-        eval_num=args.eval_num
+        eval_num=args.eval_num, 
+        latent_dim=args.latent_dim
     )
 
     train_loss, valid_loss = trainer.train(show_loss_plot=args.show_loss_plot, save_loss_plot=args.save_loss_plot, var=args.var)

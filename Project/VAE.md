@@ -73,7 +73,7 @@ $$
 
 $\theta^* = \arg \min_\theta D_{KL}(p_{data} || p_\theta)$
 
-+ 推导$\theta^* = \arg \max_\theta \mathbb{E}_{x \sim p_{data}}[p_\theta(\textbf{x})]$**(10pt)**
++ 推导$\theta^* = \arg \max_\theta \mathbb{E}_{x \sim p_{data}}[\log p_\theta(\textbf{x})]$**(10pt)**
 
 
 这个式子对于实际的操作就方便太多了，这里的期望我们可以通过采样来近似，我们从$p_{data}$中直接采样即可，然后通过对数似然的方法优化，也就是从数据集中随机采样$\{\textbf{x}^1, \textbf{x}^2, \textbf{x}^3, \cdots, \textbf{x}^m\}$，来最大化$\sum_{i=1}^m \log p_\theta(\textbf{x}^i|\theta)$
@@ -110,7 +110,7 @@ $$
 
 最后我们的损失函数可以化简为（这里不用你来推导，感兴趣可以自行尝试，只是一个代入表达式化简的过程，高斯分布之间的KL散度上面已经给出过）
 
-$\mathcal{L}(\theta, \phi, \textbf{x}) = \sum_{i=1}^d\frac{1}{2}(-1 + (\sigma_\phi^{(i)})^2 + (\mu_\phi^{(i)})^2 - \log (\sigma_\phi^{(i)})^2) + \frac{1}{2\sigma^2}||\textbf{x} - \textbf{z}||_2^2$
+$\mathcal{L}(\theta, \phi, \textbf{x}) = \sum_{i=1}^d\frac{1}{2}(-1 + (\sigma_\phi^{(i)})^2 + (\mu_\phi^{(i)})^2 - \log (\sigma_\phi^{(i)})^2) + \frac{1}{2\sigma^2}||\textbf{x} - \mu_{\theta}(\textbf{z})||_2^2$
 
 注：这里需要一个叫做重参数化技巧(reparameterization trick)，因为这里的$\textbf{z}$是隐藏code的一个采样，所以不能直接使用采样的方式来进行使用，否则梯度无法反向传播回去，但我们知道$\textbf{z}|\textbf{x}$的分布，所以完全可以合成一下
 
@@ -209,7 +209,7 @@ python inference.py --task VAEwolabel --latent_dim 20 --checkpoint_path YOUR CHE
 我们的计算公式为：
 
 + 对于VAE生成任务：$Grade = \min((ssim * 5 + \max((0.1 - mse), 0) * 50) * bonus, 10)$
-+ 对于Gen生成任务：$Grade = \min((ssim * 10 + \max(0.1 - mse, 0) * 100 + \max(10 - fid, 0)) * bonus, 10)$
++ 对于Gen生成任务：$Grade = \min((ssim * 10 + \max(0.1 - mse, 0) * 100 + \max(10 - fid, 0)) * bonus, 30)$
 + 其中这个$bonus$是对压缩率的影响的一个系数，压缩率$R = 1 - \frac{latent\_dim}{784}$，$bonus = 0.2 + R$
 
 > 设置bonus的意义在于，能够在保证重构、生成质量的情况下，体现出图像压缩的功能，防止比如说，隐藏层的维度就设置成784，encoder,decoder就是两个单位阵，来满足完全一比一照搬的情况（这样照搬虽然能做重构任务，但做不了生成任务，而且也毫无实际意义）
