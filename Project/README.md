@@ -18,11 +18,9 @@
   + VAEwolabel
     + epoch.pth
     + hyperparameters.json
-    + grade_result.json
   + Genwithlabel
     + epoch.pth
     + hyperparameters.json
-    + grade_result.json
   + submission.py
   + report.pdf
   + [If needed] Other .py file (Not Recommended)
