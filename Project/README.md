@@ -17,11 +17,11 @@
 + `G组号-FINAL.zip` (e.g. `G0-FINAL.zip`)
   + VAEwolabel
     + epoch.pth
-    + hyperparameters.txt
+    + hyperparameters.json
     + grade_result.json
   + Genwithlabel
     + epoch.pth
-    + hyperparameters.txt
+    + hyperparameters.json
     + grade_result.json
   + submission.py
   + report.pdf
